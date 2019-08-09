@@ -1,4 +1,5 @@
 import requests
+import helpers
 from urllib.request import urlopen
 import time
 from bs4 import BeautifulSoup
@@ -10,33 +11,13 @@ def write_secret(secret):
     csv_out = csv.writer(file_handler)
     csv_out.writerow(secret)
 
-MALE = "hombre"
-MALE_SYMBOL = "H"
-FEMALE = "mujer"
-FEMALE_SYMBOL = "M"
-
-def get_gender(secret_title):
-  if MALE in secret_title:
-    return MALE_SYMBOL
-  elif FEMALE in secret_title:
-    return FEMALE_SYMBOL
-  else:
-    return "undefined"
-
-AGE_START = -7
-AGE_END = -5
-
-def get_age(secret_title):
-  return secret_title[AGE_START:AGE_END]
 
 TITLE_START = 15
 UNDEFINED = "undefined"
 
-secret_id = 0
+secret_id = 12129710
 
-secrets = []
-
-for x in range(0, 10):
+for x in range(0, 2000):
   url = 'https://tusecreto.io/secret/'+str(secret_id)
   response = requests.get(url)
   soup = BeautifulSoup(response.text, 'html.parser')
@@ -46,7 +27,7 @@ for x in range(0, 10):
     secret_id += 1
     time.sleep(1)
     continue
-  gender = get_gender(title)
-  age = get_age(title)
+  gender = helpers.get_gender(title)
+  age = helpers.get_age(title)
   write_secret((gender, age, description))
   secret_id += 1
